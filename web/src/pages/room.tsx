@@ -2,8 +2,10 @@ import { useParams } from "react-router-dom"
 import { toast } from "sonner"
 
 import amaLogo from '../assets/ama-logo.svg'
-import { ArrowRight, Share2 } from "lucide-react"
-import { Message } from "../components/message"
+import { Messages } from "../components/messages"
+import { Suspense } from "react"
+import { CreateMessageForm } from "../components/create-message-form"
+import { Share2 } from "lucide-react"
 
 export function Room() {
   const { roomId } = useParams()
@@ -16,7 +18,7 @@ export function Room() {
     } else {
       navigator.clipboard.writeText(url)
 
-      toast('The room URL was copied to your clipboard!')
+      toast('O link da sala foi copiado para a área de transferência!')
     }
   }
 
@@ -41,41 +43,11 @@ export function Room() {
 
       <div className="h-px w-full bg-zinc-900" />
 
-      <form
-        className='flex items-center gap-2 bg-zinc-900 p-2 rounded-xl border border-zinc-800 ring-orange-400 ring-offset-2 ring-offset-zinc-950 focus-within:ring-1'
-      >
-        <input
-          name='theme'
-          placeholder='Qual a sua pergunta'
-          type="text"
-          autoComplete='off'
-          className='flex-1 text-sm bg-transparent mx-2 outline-none placeholder:text-zinc-500 text-zinc-100'
-        />
+      <CreateMessageForm />
 
-        <button
-          type='submit'
-          className='bg-orange-400 text-orange-950 px-3 py-1.5 gap-1.5 flex items-center rounded-lg font-medium text-sm hover:bg-orange-500 transition-colors'
-        >
-          Criar pergunta
-          <ArrowRight className='size-4' />
-        </button>
-      </form>
-
-      <ol className="list-decimal list-inside px-3 space-y-8">
-        <Message
-          text="O que é GoLang e quais são suas principais vantagens em comparação com outras linguagens de programação como Python, Java ou C++?"
-          amountOfReactions={182}
-          answered
-        />
-        <Message
-          text="Como funcionam as goroutines em GoLang e por que elas são importantes para a concorrência e paralelismo?"
-          amountOfReactions={173}
-        />
-        <Message
-          text="Quais são as melhores práticas para organizar o código em um projeto GoLang, incluindo pacotes, módulos e a estrutura de diretórios?"
-          amountOfReactions={87}
-        />
-      </ol>
+      <Suspense fallback={<p>carregando</p>}>
+        <Messages />
+      </Suspense>
     </div>
   )
 }
